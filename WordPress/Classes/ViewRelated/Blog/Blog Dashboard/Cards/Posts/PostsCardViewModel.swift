@@ -8,6 +8,7 @@ protocol PostsCardView: AnyObject {
     func showLoading()
     func hideLoading()
     func showError(message: String, retry: Bool)
+    func hideError()
     func showNextPostPrompt()
     func hideNextPrompt()
     func firstPostPublished()
@@ -46,7 +47,7 @@ class PostsCardViewModel: NSObject {
 
         let cell = tableView.dequeueReusableCell(withIdentifier: PostCompactCell.defaultReuseID, for: indexPath)
 
-        self.viewController?.hideLoading()
+        self.hideLoadingAndError()
 
         self.configureCell(cell, at: indexPath, with: post)
 
@@ -194,7 +195,7 @@ private extension PostsCardViewModel {
                     self?.showNextPostPrompt()
                 }
 
-                self?.hideLoading()
+                self?.hideLoadingAndError()
                 self?.syncing = nil
             }, failure: { [weak self] _ in
                 self?.syncing = nil
@@ -231,7 +232,7 @@ private extension PostsCardViewModel {
 
     func showNextPostPrompt() {
         showNextPostPromptIfNeeded()
-        viewController?.hideLoading()
+        hideLoadingAndError()
     }
 
     func showLoadingFailureError() {
@@ -239,8 +240,9 @@ private extension PostsCardViewModel {
         viewController?.hideLoading()
     }
 
-    func hideLoading() {
+    func hideLoadingAndError() {
         viewController?.hideLoading()
+        viewController?.hideError()
     }
 
     func showLoadingIfNeeded() {

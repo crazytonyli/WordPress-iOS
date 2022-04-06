@@ -162,7 +162,6 @@ extension PostsCardViewController: PostsCardView {
             return
         }
 
-        errorView?.removeFromSuperview()
         removeGhostableTableView()
 
         if nextPostView == nil && errorView == nil {
@@ -187,6 +186,11 @@ extension PostsCardViewController: PostsCardView {
         _ = tableView.intrinsicContentSize
 
         WPAnalytics.track(.dashboardCardShown, properties: ["type": "post", "sub_type": "error"])
+    }
+
+    func hideError() {
+        errorView?.removeFromSuperview()
+        errorView = nil
     }
 
     func showNextPostPrompt() {
