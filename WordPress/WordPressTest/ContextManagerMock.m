@@ -76,15 +76,6 @@
     return _mainContext;
 }
 
-- (void)saveContextAndWait:(NSManagedObjectContext *)context
-{
-    [super saveContextAndWait:context];
-    // FIXME: Remove this method to use superclass one instead
-    // This log magically resolves a deadlock in
-    // `ZDashboardCardTests.testShouldNotShowQuickStartIfDefaultSectionIsSiteMenu`
-    NSLog(@"Context save completed");
-}
-
 - (NSURL *)storeURL
 {
     NSString *documentsDirectory = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory,

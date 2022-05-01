@@ -115,6 +115,23 @@ class ContextManagerTests: XCTestCase {
         }
     }
 
+    func testNoDeadlockWhenSavingDerivedContext() {
+        // The purpose of this test is checking if it executes without getting
+        // stuck. That's why there is no assertion in this test method.
+        //
+        // But it the test does get stuck, the result is kind of catastrophic,
+        // as it will block the rest of the test suite from being executed.
+
+        let context = contextManager.newDerivedContext()
+        let blog = BlogBuilder(context).build()
+        let guide = QuickStartTourGuide.shared
+        guide.setup(for: blog, type: .newSite)
+        // This method calls `ContextManager.saveContextAndWait` twice with
+        // a derived context, which caused a deadlock - the second call was
+        // stuck at `performBlockAndWait`.
+        guide.remove(from: blog)
+    }
+
     // MARK: - Helper Methods
 
     fileprivate func startupCoredataStack(_ modelName: String) {

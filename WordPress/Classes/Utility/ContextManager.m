@@ -135,8 +135,8 @@ static ContextManager *_override;
     if (wait) {
         [context performBlockAndWait:^{
             [self internalSaveContext:context];
-            [self saveContext:self.mainContext andWait:wait withCompletionBlock:completionBlock];
         }];
+        [self saveContext:self.mainContext andWait:wait withCompletionBlock:completionBlock];
     } else {
         [context performBlock:^{
             [self internalSaveContext:context];
