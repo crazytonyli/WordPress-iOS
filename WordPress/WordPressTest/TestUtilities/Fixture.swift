@@ -21,7 +21,7 @@ extension FixtureFile {
 
 }
 
-extension RawRepresentable where RawValue: StringProtocol {
+extension FixtureFile where Self: RawRepresentable, Self.RawValue: StringProtocol {
     var fileName: String {
         return String(rawValue)
     }
