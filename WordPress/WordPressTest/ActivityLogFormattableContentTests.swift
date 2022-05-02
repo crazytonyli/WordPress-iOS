@@ -7,7 +7,7 @@ final class ActivityLogFormattableContentTests: XCTestCase {
     let actionsParser = ActivityActionsParser()
 
     func testPingbackContentIsParsedCorrectly() throws {
-        let dictionary = try Fixture.Activity.pingback.jsonObject()
+        let dictionary = try Fixture.ActivityContent.pingback.jsonObject()
 
         let pingbackContent = ActivityContentFactory.content(from: [dictionary], actionsParser: actionsParser)
 
@@ -22,7 +22,7 @@ final class ActivityLogFormattableContentTests: XCTestCase {
     }
 
     func testPostContentIsParsedCorrectly() throws {
-        let dictionary = try Fixture.Activity.postContent.jsonObject()
+        let dictionary = try Fixture.ActivityContent.postContent.jsonObject()
         let postContent = ActivityContentFactory.content(from: [dictionary], actionsParser: actionsParser)
 
         XCTAssertEqual(postContent.count, 1)
@@ -35,7 +35,7 @@ final class ActivityLogFormattableContentTests: XCTestCase {
     }
 
     func testCommentContentIsParsedCorrectly() throws {
-        let dictionary = try Fixture.Activity.commentContent.jsonObject()
+        let dictionary = try Fixture.ActivityContent.commentContent.jsonObject()
         let commentContent = ActivityContentFactory.content(from: [dictionary], actionsParser: actionsParser)
 
         XCTAssertEqual(commentContent.count, 1)
@@ -49,7 +49,7 @@ final class ActivityLogFormattableContentTests: XCTestCase {
     }
 
     func testThemeContentIsParsedCorrectly() throws {
-        let dictionary = try Fixture.Activity.themeContent.jsonObject()
+        let dictionary = try Fixture.ActivityContent.themeContent.jsonObject()
         let themeContent = ActivityContentFactory.content(from: [dictionary], actionsParser: actionsParser)
 
         XCTAssertEqual(themeContent.count, 1)
@@ -62,7 +62,7 @@ final class ActivityLogFormattableContentTests: XCTestCase {
     }
 
     func testSettingContentIsParsedCorrectly() throws {
-        let dictionary = try Fixture.Activity.settingsContent.jsonObject()
+        let dictionary = try Fixture.ActivityContent.settingsContent.jsonObject()
         let settingsContent = ActivityContentFactory.content(from: [dictionary], actionsParser: actionsParser)
 
         XCTAssertEqual(settingsContent.count, 1)
@@ -76,7 +76,7 @@ final class ActivityLogFormattableContentTests: XCTestCase {
     }
 
     func testSiteContentIsParsedCorreclty() throws {
-        let dictionary = try Fixture.Activity.siteContent.jsonObject()
+        let dictionary = try Fixture.ActivityContent.siteContent.jsonObject()
         let siteContent = ActivityContentFactory.content(from: [dictionary], actionsParser: actionsParser)
 
         XCTAssertEqual(siteContent.count, 1)
@@ -89,7 +89,7 @@ final class ActivityLogFormattableContentTests: XCTestCase {
     }
 
     func testPluginContentIsParsedCorreclty() throws {
-        let dictionary = try Fixture.Activity.pluginContent.jsonObject()
+        let dictionary = try Fixture.ActivityContent.pluginContent.jsonObject()
         let pluginContent = ActivityContentFactory.content(from: [dictionary], actionsParser: actionsParser)
 
         XCTAssertEqual(pluginContent.count, 1)

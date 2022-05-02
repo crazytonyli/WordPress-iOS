@@ -47,7 +47,7 @@ final class ActivityLogRangesTests: XCTestCase {
     }
 
     func testRangeFactoryCreatesCommentRange() throws {
-        let range = try Fixture.Activity.commentContent.range()
+        let range = try Fixture.ActivityContent.commentContent.range()
 
         XCTAssertNotNil(range)
         XCTAssertTrue(range is ActivityCommentRange)
@@ -59,7 +59,7 @@ final class ActivityLogRangesTests: XCTestCase {
     }
 
     func testRangeFactoryCreatesThemeRange() throws {
-        let range = try Fixture.Activity.themeContent.range()
+        let range = try Fixture.ActivityContent.themeContent.range()
 
         XCTAssertNotNil(range)
         XCTAssertTrue(range is ActivityRange)
@@ -71,7 +71,7 @@ final class ActivityLogRangesTests: XCTestCase {
     }
 
     func testRangeFactoryCreatesPostRange() throws {
-        let range = try Fixture.Activity.postContent.range()
+        let range = try Fixture.ActivityContent.postContent.range()
         XCTAssertNotNil(range)
         XCTAssertEqual(range?.kind, .post)
         XCTAssertTrue(range is ActivityPostRange)
@@ -82,20 +82,20 @@ final class ActivityLogRangesTests: XCTestCase {
     }
 
     func testRangeFactoryCreatesItalicRange() throws {
-        let range = try Fixture.Activity.settingsContent.range()
+        let range = try Fixture.ActivityContent.settingsContent.range()
         XCTAssertNotNil(range)
         XCTAssertEqual(range?.kind, .italic)
     }
 
     func testRangeFactoryCreatesSiteRange() throws {
-        let range = try Fixture.Activity.siteContent.range()
+        let range = try Fixture.ActivityContent.siteContent.range()
 
         XCTAssertNotNil(range)
         XCTAssertEqual(range?.kind, .site)
     }
 
     func testRangeFactoryCreatesPluginRange() throws {
-        let range = try Fixture.Activity.pluginContent.range()
+        let range = try Fixture.ActivityContent.pluginContent.range()
 
         XCTAssertNotNil(range)
         XCTAssertEqual(range?.kind, .plugin)

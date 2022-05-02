@@ -5,6 +5,9 @@ extension Fixture {
     enum Activity: String, FixtureFile {
         case commentEvent = "activity-log-comment.json"
         case postEvent = "activity-log-post.json"
+    }
+
+    enum ActivityContent: String, FixtureFile {
         case pingback = "activity-log-pingback-content.json"
         case postContent = "activity-log-post-content.json"
         case commentContent = "activity-log-comment-content.json"
@@ -12,6 +15,7 @@ extension Fixture {
         case settingsContent = "activity-log-settings-content.json"
         case siteContent = "activity-log-site-content.json"
         case pluginContent = "activity-log-plugin-content.json"
+        case activity = "activity-log-activity-content.json"
 
         func range() throws -> FormattableContentRange? {
             let ranges = try jsonObject()["ranges"] as! [JSONLoader.JSONDictionary]
