@@ -2,11 +2,10 @@ import XCTest
 @testable import WordPress
 
 final class FormattableCommentContentTests: XCTestCase {
-    private let contextManager = TestContextManager()
+    private var contextManager: TestContextManager!
     private let entityName = Notification.classNameWithoutNamespaces()
 
     private var subject: FormattableCommentContent?
-    private var utility = NotificationUtility()
 
     private struct Expectations {
         static let text = "This is an unapproved comment"
@@ -17,15 +16,20 @@ final class FormattableCommentContentTests: XCTestCase {
         static let metaSiteId = NSNumber(integerLiteral: 142010142)
     }
 
-    override func setUp() {
-        super.setUp()
-        utility.setUp()
-        subject = FormattableCommentContent(dictionary: mockDictionary(), actions: mockedActions(), ranges: [], parent: loadLikeNotification())
+    override func setUpWithError() throws {
+        try super.setUpWithError()
+        contextManager = TestContextManager()
+        subject = FormattableCommentContent(
+            dictionary: try Fixtures.NotificationContent.comment.jsonObject(),
+            actions: mockedActions(),
+            ranges: [],
+            parent: try Fixtures.Notification.like.insertInto(contextManager.mainContext)
+        )
     }
 
     override func tearDown() {
         subject = nil
-        utility.tearDown()
+        ContextManager.overrideSharedInstance(nil)
         super.tearDown()
     }
 
@@ -54,13 +58,13 @@ final class FormattableCommentContentTests: XCTestCase {
         XCTAssertEqual(value?.count, mockActionsCount)
     }
 
-    func testMetaReturnsExpectation() {
+    func testMetaReturnsExpectation() throws {
         let value = subject!.meta!
         let ids = value["ids"] as? [String: AnyObject]
         let commentId = ids?["comment"] as? String
         let postId = ids?["post"] as? String
 
-        let mockMeta = loadMeta()
+        let mockMeta = try Fixtures.jsonObject(fromFile: "notifications-comment-meta.json")
         let mockIds = mockMeta["ids"] as? [String: AnyObject]
         let mockMetaCommentId = mockIds?["comment"] as? String
         let mockMetaPostId = mockIds?["post"] as? String
@@ -69,8 +73,8 @@ final class FormattableCommentContentTests: XCTestCase {
         XCTAssertEqual(postId, mockMetaPostId)
     }
 
-    func testParentReturnsValuePassedAsParameter() {
-        let injectedParent = loadLikeNotification()
+    func testParentReturnsValuePassedAsParameter() throws {
+        let injectedParent = try Fixtures.Notification.like.insertInto(contextManager.mainContext)
 
         let parent = subject?.parent
 
@@ -115,8 +119,8 @@ final class FormattableCommentContentTests: XCTestCase {
         XCTAssertEqual(id, Expectations.metaSiteId)
     }
 
-    func testCommentNotificationHasActions() {
-        let commentNotification = utility.loadCommentNotification()
+    func testCommentNotificationHasActions() throws {
+        let commentNotification = try Fixtures.Notification.repliedComment.insertInto(contextManager.mainContext)
         let commentContent: FormattableCommentContent? = commentNotification.contentGroup(ofKind: .comment)?.blockOfKind(.comment)
         XCTAssertNotNil(commentContent)
 
@@ -131,22 +135,6 @@ final class FormattableCommentContentTests: XCTestCase {
         XCTAssertNotNil(replyAction)
         XCTAssertNotNil(likeAction)
         XCTAssertNotNil(markAsSpam)
-    }
-
-    private func mockDictionary() -> [String: AnyObject] {
-        return getDictionaryFromFile(named: "notifications-comment-content.json")
-    }
-
-    private func getDictionaryFromFile(named fileName: String) -> [String: AnyObject] {
-        return JSONLoader().loadFile(named: fileName) ?? [:]
-    }
-
-    private func loadLikeNotification() -> WordPress.Notification {
-        return utility.loadLikeNotification()
-    }
-
-    private func loadMeta() -> [String: AnyObject] {
-        return getDictionaryFromFile(named: "notifications-comment-meta.json")
     }
 
     private func mockedActions() -> [FormattableContentAction] {

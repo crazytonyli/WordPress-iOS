@@ -16,34 +16,6 @@ class NotificationUtility {
         ContextManager.overrideSharedInstance(nil)
     }
 
-    private var entityName: String {
-        return Notification.classNameWithoutNamespaces()
-    }
-
-    func loadBadgeNotification() -> WordPress.Notification {
-        return .fixture(fromFile: "notifications-badge.json", insertInto: contextManager.mainContext)
-    }
-
-    func loadLikeNotification() -> WordPress.Notification {
-        return .fixture(fromFile: "notifications-like.json", insertInto: contextManager.mainContext)
-    }
-
-    func loadFollowerNotification() -> WordPress.Notification {
-        return .fixture(fromFile: "notifications-new-follower.json", insertInto: contextManager.mainContext)
-    }
-
-    func loadCommentNotification() -> WordPress.Notification {
-        return .fixture(fromFile: "notifications-replied-comment.json", insertInto: contextManager.mainContext)
-    }
-
-    func loadUnapprovedCommentNotification() -> WordPress.Notification {
-        return .fixture(fromFile: "notifications-unapproved-comment.json", insertInto: contextManager.mainContext)
-    }
-
-    func loadPingbackNotification() -> WordPress.Notification {
-        return .fixture(fromFile: "notifications-pingback.json", insertInto: contextManager.mainContext)
-    }
-
     func mockCommentContent() -> FormattableCommentContent {
         let dictionary = JSONLoader().loadFile(named: "notifications-replied-comment.json") ?? [:]
         let body = dictionary["body"]
@@ -53,5 +25,25 @@ class NotificationUtility {
 
     func mockCommentContext() -> ActionContext<FormattableCommentContent> {
         return ActionContext(block: mockCommentContent())
+    }
+}
+
+extension Fixtures {
+    enum Notification: String, ManagedObjectFixture {
+        typealias Model = WordPress.Notification
+
+        case badge = "notifications-badge.json"
+        case like = "notifications-like.json"
+        case newFollower = "notifications-new-follower.json"
+        case repliedComment = "notifications-replied-comment.json"
+        case unapprovedComment = "notifications-unapproved-comment.json"
+        case pingback = "notifications-pingback.json"
+    }
+
+    enum NotificationContent: String, JSONFileFixture {
+        case comment = "notifications-comment-content.json"
+        case text = "notifications-text-content.json"
+        case buttonText = "notifications-button-text-content.json"
+        case user = "notifications-user-content.json"
     }
 }
