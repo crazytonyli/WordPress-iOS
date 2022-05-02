@@ -4,24 +4,26 @@ import XCTest
 
 class NotificationContentRouterTests: XCTestCase {
 
-    let utility = NotificationUtility()
+    var contextManager: TestContextManager!
     var sut: NotificationContentRouter!
     var coordinator: MockContentCoordinator!
 
     override func setUp() {
         super.setUp()
-        utility.setUp()
+        contextManager = TestContextManager()
         coordinator = MockContentCoordinator()
     }
 
     override func tearDown() {
-        utility.tearDown()
+        ContextManager.overrideSharedInstance(nil)
         super.tearDown()
     }
 
     func testFollowNotificationSourceRoutesToStream() {
-        let notification = utility.loadFollowerNotification()
-        sut = NotificationContentRouter(activity: notification, coordinator: coordinator)
+        sut = NotificationContentRouter(
+            activity: .fixture(.newFollower, insertInto: contextManager.mainContext),
+            coordinator: coordinator
+        )
         try! sut.routeToNotificationSource()
 
         XCTAssertTrue(coordinator.streamWasDisplayed)

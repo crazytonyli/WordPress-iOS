@@ -2,9 +2,7 @@ import XCTest
 @testable import WordPress
 
 final class FormattableContentGroupTests: XCTestCase {
-    private let contextManager = TestContextManager()
     private var subject: FormattableContentGroup?
-    private let utility = NotificationUtility()
 
     private struct Constants {
         static let kind: FormattableContentGroup.Kind = .activity
@@ -12,15 +10,11 @@ final class FormattableContentGroupTests: XCTestCase {
 
     override func setUp() {
         super.setUp()
-        utility.setUp()
-        ContextManager.overrideSharedInstance(nil)
         subject = FormattableContentGroup(blocks: [mockContent()], kind: Constants.kind)
     }
 
     override func tearDown() {
-        utility.tearDown()
         subject = nil
-        ContextManager.overrideSharedInstance(nil)
         super.tearDown()
     }
 

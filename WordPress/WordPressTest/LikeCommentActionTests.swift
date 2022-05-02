@@ -26,6 +26,7 @@ final class LikeCommentActionTests: XCTestCase {
 
     private var action: LikeComment?
     private let utility = NotificationUtility()
+    private var contextManager: TestContextManager!
 
     private struct Constants {
         static let initialStatus: Bool = false
@@ -33,7 +34,7 @@ final class LikeCommentActionTests: XCTestCase {
 
     override func setUp() {
         super.setUp()
-        utility.setUp()
+        contextManager = TestContextManager()
         action = TestableLikeComment(on: Constants.initialStatus)
         makeNetworkAvailable()
     }
@@ -41,7 +42,7 @@ final class LikeCommentActionTests: XCTestCase {
     override func tearDown() {
         action = nil
         makeNetworkUnavailable()
-        utility.tearDown()
+        ContextManager.overrideSharedInstance(nil)
         super.tearDown()
     }
 
@@ -64,7 +65,7 @@ final class LikeCommentActionTests: XCTestCase {
     func testExecuteCallsUnlikeWhenActionIsOn() {
         action?.on = true
 
-        action?.execute(context: utility.mockCommentContext())
+        action?.execute(context: utility.mockCommentContext(insertInto: contextManager.mainContext))
 
         guard let mockService = action?.actionsService as? MockNotificationActionsService else {
             XCTFail()
@@ -77,7 +78,7 @@ final class LikeCommentActionTests: XCTestCase {
     func testExecuteUpdatesActionTitleWhenActionIsOn() {
         action?.on = true
 
-        action?.execute(context: utility.mockCommentContext())
+        action?.execute(context: utility.mockCommentContext(insertInto: contextManager.mainContext))
 
         XCTAssertEqual(action?.actionTitle, LikeComment.TitleStrings.like)
     }
@@ -85,7 +86,7 @@ final class LikeCommentActionTests: XCTestCase {
     func testExecuteCallsLikeWhenActionIsOff() {
         action?.on = false
 
-        action?.execute(context: utility.mockCommentContext())
+        action?.execute(context: utility.mockCommentContext(insertInto: contextManager.mainContext))
 
         guard let mockService = action?.actionsService as? MockNotificationActionsService else {
             XCTFail()
@@ -98,7 +99,7 @@ final class LikeCommentActionTests: XCTestCase {
     func testExecuteUpdatesActionTitleWhenActionIsOff() {
         action?.on = false
 
-        action?.execute(context: utility.mockCommentContext())
+        action?.execute(context: utility.mockCommentContext(insertInto: contextManager.mainContext))
 
         XCTAssertEqual(action?.actionTitle, LikeComment.TitleStrings.unlike)
     }

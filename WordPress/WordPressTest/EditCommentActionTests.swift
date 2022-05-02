@@ -20,6 +20,7 @@ final class EditCommentActionTests: XCTestCase {
 
     private var action: EditComment?
     private let utility = NotificationUtility()
+    private var contextManager: TestContextManager!
 
     private struct Constants {
         static let initialStatus: Bool = false
@@ -27,13 +28,13 @@ final class EditCommentActionTests: XCTestCase {
 
     override func setUp() {
         super.setUp()
-        utility.setUp()
+        contextManager = TestContextManager()
         action = TestableEditComment(on: Constants.initialStatus)
     }
 
     override func tearDown() {
         action = nil
-        utility.tearDown()
+        ContextManager.overrideSharedInstance(nil)
         super.tearDown()
     }
 
@@ -42,7 +43,7 @@ final class EditCommentActionTests: XCTestCase {
     }
 
     func testExecuteCallsEdit() {
-        action?.execute(context: utility.mockCommentContext())
+        action?.execute(context: utility.mockCommentContext(insertInto: contextManager.mainContext))
 
         guard let mockService = action?.actionsService as? MockNotificationActionsService else {
             XCTFail()

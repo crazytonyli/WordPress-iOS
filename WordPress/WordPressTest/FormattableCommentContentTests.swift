@@ -2,11 +2,10 @@ import XCTest
 @testable import WordPress
 
 final class FormattableCommentContentTests: XCTestCase {
-    private let contextManager = TestContextManager()
+    private var contextManager: TestContextManager!
     private let entityName = Notification.classNameWithoutNamespaces()
 
     private var subject: FormattableCommentContent?
-    private var utility = NotificationUtility()
 
     private struct Expectations {
         static let text = "This is an unapproved comment"
@@ -19,13 +18,18 @@ final class FormattableCommentContentTests: XCTestCase {
 
     override func setUp() {
         super.setUp()
-        utility.setUp()
-        subject = FormattableCommentContent(dictionary: mockDictionary(), actions: mockedActions(), ranges: [], parent: loadLikeNotification())
+        contextManager = TestContextManager()
+        subject = FormattableCommentContent(
+            dictionary: mockDictionary(),
+            actions: mockedActions(),
+            ranges: [],
+            parent: WordPress.Notification.fixture(.like, insertInto: contextManager.mainContext)
+        )
     }
 
     override func tearDown() {
         subject = nil
-        utility.tearDown()
+        ContextManager.overrideSharedInstance(nil)
         super.tearDown()
     }
 
@@ -70,7 +74,7 @@ final class FormattableCommentContentTests: XCTestCase {
     }
 
     func testParentReturnsValuePassedAsParameter() {
-        let injectedParent = loadLikeNotification()
+        let injectedParent = WordPress.Notification.fixture(.like, insertInto: contextManager.mainContext)
 
         let parent = subject?.parent
 
@@ -116,7 +120,7 @@ final class FormattableCommentContentTests: XCTestCase {
     }
 
     func testCommentNotificationHasActions() {
-        let commentNotification = utility.loadCommentNotification()
+        let commentNotification = WordPress.Notification.fixture(.repliedComment, insertInto: contextManager.mainContext)
         let commentContent: FormattableCommentContent? = commentNotification.contentGroup(ofKind: .comment)?.blockOfKind(.comment)
         XCTAssertNotNil(commentContent)
 
@@ -139,10 +143,6 @@ final class FormattableCommentContentTests: XCTestCase {
 
     private func getDictionaryFromFile(named fileName: String) -> [String: AnyObject] {
         return JSONLoader().loadFile(named: fileName) ?? [:]
-    }
-
-    private func loadLikeNotification() -> WordPress.Notification {
-        return utility.loadLikeNotification()
     }
 
     private func loadMeta() -> [String: AnyObject] {

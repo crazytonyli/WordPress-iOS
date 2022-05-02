@@ -24,7 +24,12 @@ final class FormattableUserContentTests: XCTestCase {
 
     override func setUp() {
         super.setUp()
-        subject = FormattableUserContent(dictionary: mockDictionary(), actions: mockedActions(), ranges: [], parent: loadLikeNotification())
+        subject = FormattableUserContent(
+            dictionary: mockDictionary(),
+            actions: mockedActions(),
+            ranges: [],
+            parent: WordPress.Notification.fixture(.like, insertInto: contextManager.mainContext)
+        )
     }
 
     override func tearDown() {
@@ -84,7 +89,7 @@ final class FormattableUserContentTests: XCTestCase {
     }
 
     func testParentReturnsValuePassedAsParameter() {
-        let injectedParent = loadLikeNotification()
+        let injectedParent = WordPress.Notification.fixture(.like, insertInto: contextManager.mainContext)
 
         let parent = subject?.parent
 
@@ -135,10 +140,6 @@ final class FormattableUserContentTests: XCTestCase {
 
     private func getDictionaryFromFile(named fileName: String) -> [String: AnyObject] {
         return JSONLoader().loadFile(named: fileName) ?? [:]
-    }
-
-    private func loadLikeNotification() -> WordPress.Notification {
-        return .fixture(fromFile: "notifications-like.json", insertInto: contextManager.mainContext)
     }
 
     private func loadMeta() -> [String: AnyObject] {

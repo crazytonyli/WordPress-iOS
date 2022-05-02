@@ -16,7 +16,8 @@ final class MarkAsSpamActionTests: XCTestCase {
     }
 
     private var action: MarkAsSpam?
-    let utility = NotificationUtility()
+    private let utility = NotificationUtility()
+    private var contextManager = TestContextManager()
 
     private struct Constants {
         static let initialStatus: Bool = false
@@ -24,7 +25,7 @@ final class MarkAsSpamActionTests: XCTestCase {
 
     override func setUp() {
         super.setUp()
-        utility.setUp()
+        contextManager = TestContextManager()
         action = TestableMarkAsSpam(on: Constants.initialStatus)
         makeNetworkAvailable()
     }
@@ -32,7 +33,7 @@ final class MarkAsSpamActionTests: XCTestCase {
     override func tearDown() {
         action = nil
         makeNetworkUnavailable()
-        utility.tearDown()
+        ContextManager.overrideSharedInstance(nil)
         super.tearDown()
     }
 
@@ -49,7 +50,7 @@ final class MarkAsSpamActionTests: XCTestCase {
 
         var executionCompleted = false
 
-        let context = ActionContext(block: utility.mockCommentContent(), content: "content") { (request, success) in
+        let context = ActionContext(block: utility.mockCommentContent(insertInto: contextManager.mainContext), content: "content") { (request, success) in
             executionCompleted = true
         }
 

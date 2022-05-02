@@ -6,19 +6,31 @@ final class NotificationsContentFactoryTests: XCTestCase {
     private let entityName = Notification.classNameWithoutNamespaces()
 
     func testTextNotificationReturnsExpectedImplementationOfFormattableContent() {
-        let subject = NotificationContentFactory.content(from: [mockTextContentDictionary()], actionsParser: NotificationActionParser(), parent: loadLikeNotification()).first as? NotificationTextContent
+        let subject = NotificationContentFactory.content(
+            from: [mockTextContentDictionary()],
+            actionsParser: NotificationActionParser(),
+            parent: WordPress.Notification.fixture(.like, insertInto: contextManager.mainContext)
+        ).first as? NotificationTextContent
 
         XCTAssertNotNil(subject)
     }
 
     func testCommentNotificationReturnsExpectedImplementationOfFormattableContent() {
-        let subject = NotificationContentFactory.content(from: [mockCommentContentDictionary()], actionsParser: NotificationActionParser(), parent: loadLikeNotification()).first as? FormattableCommentContent
+        let subject = NotificationContentFactory.content(
+            from: [mockCommentContentDictionary()],
+            actionsParser: NotificationActionParser(),
+            parent: WordPress.Notification.fixture(.like, insertInto: contextManager.mainContext)
+        ).first as? FormattableCommentContent
 
         XCTAssertNotNil(subject)
     }
 
     func testUserNotificationReturnsExpectedImplementationOfFormattableContent() {
-        let subject = NotificationContentFactory.content(from: [mockUserContentDictionary()], actionsParser: NotificationActionParser(), parent: loadLikeNotification()).first as? FormattableUserContent
+        let subject = NotificationContentFactory.content(
+            from: [mockUserContentDictionary()],
+            actionsParser: NotificationActionParser(),
+            parent: WordPress.Notification.fixture(.like, insertInto: contextManager.mainContext)
+        ).first as? FormattableUserContent
 
         XCTAssertNotNil(subject)
     }
@@ -39,7 +51,4 @@ final class NotificationsContentFactoryTests: XCTestCase {
         return JSONLoader().loadFile(named: fileName) ?? [:]
     }
 
-    func loadLikeNotification() -> WordPress.Notification {
-        return .fixture(fromFile: "notifications-like.json", insertInto: contextManager.mainContext)
-    }
 }

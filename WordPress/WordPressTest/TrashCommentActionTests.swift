@@ -24,7 +24,6 @@ final class TrashCommentActionTests: XCTestCase {
 
     override func setUp() {
         super.setUp()
-        utils.setUp()
         action = TestableTrashComment(on: Constants.initialStatus)
         makeNetworkAvailable()
     }
@@ -32,7 +31,6 @@ final class TrashCommentActionTests: XCTestCase {
     override func tearDown() {
         action = nil
         makeNetworkUnavailable()
-        utils.tearDown()
         super.tearDown()
     }
 
@@ -45,10 +43,11 @@ final class TrashCommentActionTests: XCTestCase {
     }
 
     func testExecuteCallsTrash() {
+        let contextManager = TestContextManager()
         action?.on = false
 
         var executionCompleted = false
-        let context = ActionContext(block: utils.mockCommentContent(), content: "content") { (request, success) in
+        let context = ActionContext(block: utils.mockCommentContent(insertInto: contextManager.mainContext), content: "content") { (request, success) in
             executionCompleted = true
         }
 

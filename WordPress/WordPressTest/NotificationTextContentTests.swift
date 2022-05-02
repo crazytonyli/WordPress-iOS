@@ -2,7 +2,7 @@ import XCTest
 @testable import WordPress
 
 final class NotificationTextContentTests: XCTestCase {
-    private let contextManager = TestContextManager()
+    private var contextManager: TestContextManager!
     private let entityName = Notification.classNameWithoutNamespaces()
 
     private var subject: NotificationTextContent?
@@ -15,10 +15,17 @@ final class NotificationTextContentTests: XCTestCase {
 
     override func setUp() {
         super.setUp()
-        subject = NotificationTextContent(dictionary: mockDictionary(), actions: mockedActions(), ranges: [], parent: loadLikeNotification())
+        contextManager = TestContextManager()
+        subject = NotificationTextContent(
+            dictionary: mockDictionary(),
+            actions: mockedActions(),
+            ranges: [],
+            parent: WordPress.Notification.fixture(.like, insertInto: contextManager.mainContext)
+        )
     }
 
     override func tearDown() {
+        ContextManager.overrideSharedInstance(nil)
         subject = nil
         super.tearDown()
     }
@@ -55,14 +62,19 @@ final class NotificationTextContentTests: XCTestCase {
     }
 
     func testKindReturnsButtonForButtonContent() {
-        subject = NotificationTextContent(dictionary: mockButtonContentDictionary(), actions: mockedActions(), ranges: [], parent: loadLikeNotification())
+        subject = NotificationTextContent(
+            dictionary: mockButtonContentDictionary(),
+            actions: mockedActions(),
+            ranges: [],
+            parent: WordPress.Notification.fixture(.like, insertInto: contextManager.mainContext)
+        )
         let notificationKind = subject?.kind
 
         XCTAssertEqual(notificationKind, .button)
     }
 
     func testParentReturnsValuePassedAsParameter() {
-        let injectedParent = loadLikeNotification()
+        let injectedParent = WordPress.Notification.fixture(.like, insertInto: contextManager.mainContext)
 
         let parent = subject?.parent
 
@@ -97,10 +109,6 @@ final class NotificationTextContentTests: XCTestCase {
 
     private func getDictionaryFromFile(named fileName: String) -> [String: AnyObject] {
         return JSONLoader().loadFile(named: fileName) ?? [:]
-    }
-
-    private func loadLikeNotification() -> WordPress.Notification {
-        return .fixture(fromFile: "notifications-like.json", insertInto: contextManager.mainContext)
     }
 
     private func mockedActions() -> [FormattableContentAction] {
