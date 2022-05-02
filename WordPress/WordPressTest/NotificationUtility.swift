@@ -4,9 +4,8 @@ import CoreData
 import XCTest
 @testable import WordPress
 
-extension WordPress.Notification {
-
-    enum Fixture: String {
+extension Fixture {
+    enum Notification: String, FixtureFile {
         case badge = "notifications-badge.json"
         case like = "notifications-like.json"
         case newFollower = "notifications-new-follower.json"
@@ -14,8 +13,11 @@ extension WordPress.Notification {
         case unapprovedComment = "notifications-unapproved-comment.json"
         case pingback = "notifications-pingback.json"
     }
+}
 
-    static func fixture(_ fixture: Fixture, insertInto context: NSManagedObjectContext) -> WordPress.Notification {
+extension WordPress.Notification {
+
+    static func fixture(_ fixture: Fixture.Notification, insertInto context: NSManagedObjectContext) -> WordPress.Notification {
         return .fixture(fromFile: fixture.rawValue, context: context)
     }
 

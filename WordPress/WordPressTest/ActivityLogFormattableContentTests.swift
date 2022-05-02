@@ -6,8 +6,8 @@ final class ActivityLogFormattableContentTests: XCTestCase {
     let testData = ActivityLogTestData()
     let actionsParser = ActivityActionsParser()
 
-    func testPingbackContentIsParsedCorrectly() {
-        let dictionary = testData.getPingbackDictionary()
+    func testPingbackContentIsParsedCorrectly() throws {
+        let dictionary = try Fixture.Activity.pingback.jsonObject()
 
         let pingbackContent = ActivityContentFactory.content(from: [dictionary], actionsParser: actionsParser)
 
@@ -21,8 +21,8 @@ final class ActivityLogFormattableContentTests: XCTestCase {
         XCTAssertEqual(pingback.ranges.last?.kind, .post)
     }
 
-    func testPostContentIsParsedCorrectly() {
-        let dictionary = testData.getPostContentDictionary()
+    func testPostContentIsParsedCorrectly() throws {
+        let dictionary = try Fixture.Activity.postContent.jsonObject()
         let postContent = ActivityContentFactory.content(from: [dictionary], actionsParser: actionsParser)
 
         XCTAssertEqual(postContent.count, 1)
@@ -34,8 +34,8 @@ final class ActivityLogFormattableContentTests: XCTestCase {
         XCTAssertEqual(post.ranges.first?.kind, .post)
     }
 
-    func testCommentContentIsParsedCorrectly() {
-        let dictionary = testData.getCommentContentDictionary()
+    func testCommentContentIsParsedCorrectly() throws {
+        let dictionary = try Fixture.Activity.commentContent.jsonObject()
         let commentContent = ActivityContentFactory.content(from: [dictionary], actionsParser: actionsParser)
 
         XCTAssertEqual(commentContent.count, 1)
@@ -48,8 +48,8 @@ final class ActivityLogFormattableContentTests: XCTestCase {
         XCTAssertEqual(comment.ranges.last?.kind, .post)
     }
 
-    func testThemeContentIsParsedCorrectly() {
-        let dictionary = testData.getThemeContentDictionary()
+    func testThemeContentIsParsedCorrectly() throws {
+        let dictionary = try Fixture.Activity.themeContent.jsonObject()
         let themeContent = ActivityContentFactory.content(from: [dictionary], actionsParser: actionsParser)
 
         XCTAssertEqual(themeContent.count, 1)
@@ -61,8 +61,8 @@ final class ActivityLogFormattableContentTests: XCTestCase {
         XCTAssertEqual(theme.ranges.first?.kind, .theme)
     }
 
-    func testSettingContentIsParsedCorrectly() {
-        let dictionary = testData.getSettingsContentDictionary()
+    func testSettingContentIsParsedCorrectly() throws {
+        let dictionary = try Fixture.Activity.settingsContent.jsonObject()
         let settingsContent = ActivityContentFactory.content(from: [dictionary], actionsParser: actionsParser)
 
         XCTAssertEqual(settingsContent.count, 1)
@@ -75,8 +75,8 @@ final class ActivityLogFormattableContentTests: XCTestCase {
         XCTAssertEqual(settings.ranges.last?.kind, .italic)
     }
 
-    func testSiteContentIsParsedCorreclty() {
-        let dictionary = testData.getSiteContentDictionary()
+    func testSiteContentIsParsedCorreclty() throws {
+        let dictionary = try Fixture.Activity.siteContent.jsonObject()
         let siteContent = ActivityContentFactory.content(from: [dictionary], actionsParser: actionsParser)
 
         XCTAssertEqual(siteContent.count, 1)
@@ -88,8 +88,8 @@ final class ActivityLogFormattableContentTests: XCTestCase {
         XCTAssertEqual(site.ranges.first?.kind, .site)
     }
 
-    func testPluginContentIsParsedCorreclty() {
-        let dictionary = testData.getPluginContentDictionary()
+    func testPluginContentIsParsedCorreclty() throws {
+        let dictionary = try Fixture.Activity.pluginContent.jsonObject()
         let pluginContent = ActivityContentFactory.content(from: [dictionary], actionsParser: actionsParser)
 
         XCTAssertEqual(pluginContent.count, 1)

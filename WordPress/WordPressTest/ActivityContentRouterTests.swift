@@ -15,8 +15,8 @@ final class ActivityContentRouterTests: XCTestCase {
         super.tearDown()
     }
 
-    func testRouteToComment() {
-        let commentActivity = getCommentActivity()
+    func testRouteToComment() throws {
+        let commentActivity = FormattableActivity(with: try Activity.fixture(.commentEvent))
         let router = ActivityContentRouter(activity: commentActivity, coordinator: testCoordinator)
 
         router.routeTo(commentURL)
@@ -26,8 +26,8 @@ final class ActivityContentRouterTests: XCTestCase {
         XCTAssertEqual(testCoordinator.commentSiteID?.intValue, testData.testSiteID)
     }
 
-    func testRouteToPost() {
-        let activity = getPostActivity()
+    func testRouteToPost() throws {
+        let activity = FormattableActivity(with: try Activity.fixture(.postEvent))
         let router = ActivityContentRouter(activity: activity, coordinator: testCoordinator)
 
         router.routeTo(postURL)
@@ -49,13 +49,4 @@ extension ActivityContentRouterTests {
         return URL(string: testData.testCommentURL)!
     }
 
-    func getCommentActivity() -> FormattableActivity {
-        let activity = try! Activity(dictionary: testData.getCommentEventDictionary())
-        return FormattableActivity(with: activity)
-    }
-
-    func getPostActivity() -> FormattableActivity {
-        let activity = try! Activity(dictionary: testData.getPostEventDictionary())
-        return FormattableActivity(with: activity)
-    }
 }
