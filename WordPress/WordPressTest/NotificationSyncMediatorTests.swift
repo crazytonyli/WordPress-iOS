@@ -147,14 +147,14 @@ class NotificationSyncMediatorTests: XCTestCase {
 
     /// Verifies that Mark as Read effectively toggles a Notification's read flag
     ///
-    func testMarkAsReadEffectivelyTogglesNotificationReadStatus() {
+    func testMarkAsReadEffectivelyTogglesNotificationReadStatus() throws {
         // Stub Endpoint
         let endpoint = "notifications/read"
         let stubPath = OHPathForFile("notifications-mark-as-read.json", type(of: self))!
         HTTPStubs.stubRequest(forEndpoint: endpoint, withFileAtPath: stubPath)
 
         // Inject Dummy Note
-        let note = WordPress.Notification.fixture(.like, insertInto: manager.mainContext)
+        let note = try WordPress.Notification.fixture(.like, insertInto: manager.mainContext)
 
         XCTAssertNotNil(note)
         XCTAssertFalse(note.read)
@@ -176,16 +176,16 @@ class NotificationSyncMediatorTests: XCTestCase {
 
     /// Verifies that Mark Notifications as Read effectively toggles a Notifications' read flag
     ///
-    func testMarkNotificationsAsReadEffectivelyTogglesNotificationsReadStatus() {
+    func testMarkNotificationsAsReadEffectivelyTogglesNotificationsReadStatus() throws {
         // Stub Endpoint
         let endpoint = "notifications/read"
         let stubPath = OHPathForFile("notifications-mark-as-read.json", type(of: self))!
         HTTPStubs.stubRequest(forEndpoint: endpoint, withFileAtPath: stubPath)
 
         // Inject Dummy Note
-        let note1 = WordPress.Notification.fixture(.like, insertInto: manager.mainContext)
-        let note2 = WordPress.Notification.fixture(.newFollower, insertInto: manager.mainContext)
-        let note3 = WordPress.Notification.fixture(.unapprovedComment, insertInto: manager.mainContext)
+        let note1 = try WordPress.Notification.fixture(.like, insertInto: manager.mainContext)
+        let note2 = try WordPress.Notification.fixture(.newFollower, insertInto: manager.mainContext)
+        let note3 = try WordPress.Notification.fixture(.unapprovedComment, insertInto: manager.mainContext)
 
         XCTAssertFalse(note1.read)
         XCTAssertFalse(note3.read)
@@ -211,16 +211,16 @@ class NotificationSyncMediatorTests: XCTestCase {
 
     /// Verifies that Mark Notifications as Read modifies only the specified notifications' read status
     ///
-    func testMarkNotificationsAsReadTogglesOnlyTheReadStatusOfPassedInNotifications() {
+    func testMarkNotificationsAsReadTogglesOnlyTheReadStatusOfPassedInNotifications() throws {
         // Stub Endpoint
         let endpoint = "notifications/read"
         let stubPath = OHPathForFile("notifications-mark-as-read.json", type(of: self))!
         HTTPStubs.stubRequest(forEndpoint: endpoint, withFileAtPath: stubPath)
 
         // Inject Dummy Note
-        let note1 = WordPress.Notification.fixture(.like, insertInto: manager.mainContext)
-        let note2 = WordPress.Notification.fixture(.newFollower, insertInto: manager.mainContext)
-        let note3 = WordPress.Notification.fixture(.unapprovedComment, insertInto: manager.mainContext)
+        let note1 = try WordPress.Notification.fixture(.like, insertInto: manager.mainContext)
+        let note2 = try WordPress.Notification.fixture(.newFollower, insertInto: manager.mainContext)
+        let note3 = try WordPress.Notification.fixture(.unapprovedComment, insertInto: manager.mainContext)
 
         XCTAssertFalse(note1.read)
         XCTAssertFalse(note3.read)

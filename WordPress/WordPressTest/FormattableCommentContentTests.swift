@@ -23,7 +23,7 @@ final class FormattableCommentContentTests: XCTestCase {
             dictionary: try Fixture.NotificationContent.comment.jsonObject(),
             actions: mockedActions(),
             ranges: [],
-            parent: WordPress.Notification.fixture(.like, insertInto: contextManager.mainContext)
+            parent: try WordPress.Notification.fixture(.like, insertInto: contextManager.mainContext)
         )
     }
 
@@ -73,8 +73,8 @@ final class FormattableCommentContentTests: XCTestCase {
         XCTAssertEqual(postId, mockMetaPostId)
     }
 
-    func testParentReturnsValuePassedAsParameter() {
-        let injectedParent = WordPress.Notification.fixture(.like, insertInto: contextManager.mainContext)
+    func testParentReturnsValuePassedAsParameter() throws {
+        let injectedParent = try WordPress.Notification.fixture(.like, insertInto: contextManager.mainContext)
 
         let parent = subject?.parent
 
@@ -119,8 +119,8 @@ final class FormattableCommentContentTests: XCTestCase {
         XCTAssertEqual(id, Expectations.metaSiteId)
     }
 
-    func testCommentNotificationHasActions() {
-        let commentNotification = WordPress.Notification.fixture(.repliedComment, insertInto: contextManager.mainContext)
+    func testCommentNotificationHasActions() throws {
+        let commentNotification = try WordPress.Notification.fixture(.repliedComment, insertInto: contextManager.mainContext)
         let commentContent: FormattableCommentContent? = commentNotification.contentGroup(ofKind: .comment)?.blockOfKind(.comment)
         XCTAssertNotNil(commentContent)
 

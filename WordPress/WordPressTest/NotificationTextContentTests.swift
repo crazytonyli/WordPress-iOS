@@ -20,7 +20,7 @@ final class NotificationTextContentTests: XCTestCase {
             dictionary: try Fixture.NotificationContent.text.jsonObject(),
             actions: mockedActions(),
             ranges: [],
-            parent: WordPress.Notification.fixture(.like, insertInto: contextManager.mainContext)
+            parent: try WordPress.Notification.fixture(.like, insertInto: contextManager.mainContext)
         )
     }
 
@@ -66,15 +66,15 @@ final class NotificationTextContentTests: XCTestCase {
             dictionary: try Fixture.NotificationContent.buttonText.jsonObject(),
             actions: mockedActions(),
             ranges: [],
-            parent: WordPress.Notification.fixture(.like, insertInto: contextManager.mainContext)
+            parent: try WordPress.Notification.fixture(.like, insertInto: contextManager.mainContext)
         )
         let notificationKind = subject?.kind
 
         XCTAssertEqual(notificationKind, .button)
     }
 
-    func testParentReturnsValuePassedAsParameter() {
-        let injectedParent = WordPress.Notification.fixture(.like, insertInto: contextManager.mainContext)
+    func testParentReturnsValuePassedAsParameter() throws {
+        let injectedParent = try WordPress.Notification.fixture(.like, insertInto: contextManager.mainContext)
 
         let parent = subject?.parent
 

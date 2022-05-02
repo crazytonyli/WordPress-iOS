@@ -28,7 +28,7 @@ final class FormattableUserContentTests: XCTestCase {
             dictionary: try Fixture.NotificationContent.user.jsonObject(),
             actions: mockedActions(),
             ranges: [],
-            parent: WordPress.Notification.fixture(.like, insertInto: contextManager.mainContext)
+            parent: try WordPress.Notification.fixture(.like, insertInto: contextManager.mainContext)
         )
     }
 
@@ -88,8 +88,8 @@ final class FormattableUserContentTests: XCTestCase {
         XCTAssertEqual(siteId, mockMetaSiteId)
     }
 
-    func testParentReturnsValuePassedAsParameter() {
-        let injectedParent = WordPress.Notification.fixture(.like, insertInto: contextManager.mainContext)
+    func testParentReturnsValuePassedAsParameter() throws {
+        let injectedParent = try WordPress.Notification.fixture(.like, insertInto: contextManager.mainContext)
 
         let parent = subject?.parent
 

@@ -18,13 +18,13 @@ class NotificationTests: XCTestCase {
         super.tearDown()
     }
 
-    func testBadgeNotificationHasBadgeFlagSetToTrue() {
-        let note = WordPress.Notification.fixture(.badge, insertInto: contextManager.mainContext)
+    func testBadgeNotificationHasBadgeFlagSetToTrue() throws {
+        let note = try WordPress.Notification.fixture(.badge, insertInto: contextManager.mainContext)
         XCTAssertTrue(note.isBadge)
     }
 
-    func testBadgeNotificationHasRegularFieldsSet() {
-        let note = WordPress.Notification.fixture(.badge, insertInto: contextManager.mainContext)
+    func testBadgeNotificationHasRegularFieldsSet() throws {
+        let note = try WordPress.Notification.fixture(.badge, insertInto: contextManager.mainContext)
         XCTAssertNotNil(note.type)
         XCTAssertNotNil(note.noticon)
         XCTAssertNotNil(note.iconURL)
@@ -32,16 +32,16 @@ class NotificationTests: XCTestCase {
         XCTAssertNotNil(note.timestampAsDate)
     }
 
-    func testBadgeNotificationProperlyLoadsItsSubjectContent() {
-        let note = WordPress.Notification.fixture(.badge, insertInto: contextManager.mainContext)
+    func testBadgeNotificationProperlyLoadsItsSubjectContent() throws {
+        let note = try WordPress.Notification.fixture(.badge, insertInto: contextManager.mainContext)
 
         XCTAssert(note.subjectContentGroup?.blocks.count == 1)
         XCTAssertNotNil(note.subjectContentGroup?.blocks.first)
         XCTAssertNotNil(note.renderSubject())
     }
 
-    func testBadgeNotificationContainsOneImageContentGroup() {
-        let note = WordPress.Notification.fixture(.badge, insertInto: contextManager.mainContext)
+    func testBadgeNotificationContainsOneImageContentGroup() throws {
+        let note = try WordPress.Notification.fixture(.badge, insertInto: contextManager.mainContext)
         let group = note.contentGroup(ofKind: .image)
         XCTAssertNotNil(group)
 
@@ -53,13 +53,13 @@ class NotificationTests: XCTestCase {
         XCTAssertNotNil(media?.mediaURL)
     }
 
-    func testLikeNotificationReturnsTheProperKindValue() {
-        let note = WordPress.Notification.fixture(.like, insertInto: contextManager.mainContext)
+    func testLikeNotificationReturnsTheProperKindValue() throws {
+        let note = try WordPress.Notification.fixture(.like, insertInto: contextManager.mainContext)
         XCTAssert(note.kind == .like)
     }
 
-    func testLikeNotificationContainsHeaderContent() {
-        let note = WordPress.Notification.fixture(.like, insertInto: contextManager.mainContext)
+    func testLikeNotificationContainsHeaderContent() throws {
+        let note = try WordPress.Notification.fixture(.like, insertInto: contextManager.mainContext)
         let header = note.headerContentGroup
         XCTAssertNotNil(header)
 
@@ -74,44 +74,44 @@ class NotificationTests: XCTestCase {
     }
 
 
-    func testLikeNotificationContainsUserContentGroupsInTheBody() {
-        let note = WordPress.Notification.fixture(.like, insertInto: contextManager.mainContext)
+    func testLikeNotificationContainsUserContentGroupsInTheBody() throws {
+        let note = try WordPress.Notification.fixture(.like, insertInto: contextManager.mainContext)
         for group in note.bodyContentGroups {
             XCTAssertTrue(group.kind == .user)
         }
     }
 
-    func testLikeNotificationContainsPostAndSiteID() {
-        let note = WordPress.Notification.fixture(.like, insertInto: contextManager.mainContext)
+    func testLikeNotificationContainsPostAndSiteID() throws {
+        let note = try WordPress.Notification.fixture(.like, insertInto: contextManager.mainContext)
         XCTAssertNotNil(note.metaSiteID)
         XCTAssertNotNil(note.metaPostID)
     }
 
-    func testFollowerNotificationReturnsTheProperKindValue() {
-        let note = WordPress.Notification.fixture(.newFollower, insertInto: contextManager.mainContext)
+    func testFollowerNotificationReturnsTheProperKindValue() throws {
+        let note = try WordPress.Notification.fixture(.newFollower, insertInto: contextManager.mainContext)
         XCTAssert(note.kind == .follow)
     }
 
-    func testFollowerNotificationHasFollowFlagSetToTrue() {
-        let note = WordPress.Notification.fixture(.newFollower, insertInto: contextManager.mainContext)
+    func testFollowerNotificationHasFollowFlagSetToTrue() throws {
+        let note = try WordPress.Notification.fixture(.newFollower, insertInto: contextManager.mainContext)
         XCTAssertTrue(note.kind == .follow)
     }
 
-    func testFollowerNotificationContainsOneSubjectContent() {
-        let note = WordPress.Notification.fixture(.newFollower, insertInto: contextManager.mainContext)
+    func testFollowerNotificationContainsOneSubjectContent() throws {
+        let note = try WordPress.Notification.fixture(.newFollower, insertInto: contextManager.mainContext)
 
         let content = note.subjectContentGroup?.blocks.first
         XCTAssertNotNil(content)
         XCTAssertNotNil(content?.text)
     }
 
-    func testFollowerNotificationContainsSiteID() {
-        let note = WordPress.Notification.fixture(.newFollower, insertInto: contextManager.mainContext)
+    func testFollowerNotificationContainsSiteID() throws {
+        let note = try WordPress.Notification.fixture(.newFollower, insertInto: contextManager.mainContext)
         XCTAssertNotNil(note.metaSiteID)
     }
 
-    func testFollowerNotificationContainsUserAndFooterGroupsInTheBody() {
-        let note = WordPress.Notification.fixture(.newFollower, insertInto: contextManager.mainContext)
+    func testFollowerNotificationContainsUserAndFooterGroupsInTheBody() throws {
+        let note = try WordPress.Notification.fixture(.newFollower, insertInto: contextManager.mainContext)
 
         // Note: Account for 'View All Followers'
         for group in note.bodyContentGroups {
@@ -119,8 +119,8 @@ class NotificationTests: XCTestCase {
         }
     }
 
-    func testFollowerNotificationContainsFooterContentWithFollowRangeAtTheEnd() {
-        let note = WordPress.Notification.fixture(.newFollower, insertInto: contextManager.mainContext)
+    func testFollowerNotificationContainsFooterContentWithFollowRangeAtTheEnd() throws {
+        let note = try WordPress.Notification.fixture(.newFollower, insertInto: contextManager.mainContext)
 
         let lastGroup = note.bodyContentGroups.last
         XCTAssertNotNil(lastGroup)
@@ -136,25 +136,25 @@ class NotificationTests: XCTestCase {
         XCTAssert(range?.kind == .follow)
     }
 
-    func testCommentNotificationReturnsTheProperKindValue() {
-        let note = WordPress.Notification.fixture(.repliedComment, insertInto: contextManager.mainContext)
+    func testCommentNotificationReturnsTheProperKindValue() throws {
+        let note = try WordPress.Notification.fixture(.repliedComment, insertInto: contextManager.mainContext)
         XCTAssert(note.kind == .comment)
     }
 
-    func testCommentNotificationHasCommentFlagSetToTrue() {
-        let note = WordPress.Notification.fixture(.repliedComment, insertInto: contextManager.mainContext)
+    func testCommentNotificationHasCommentFlagSetToTrue() throws {
+        let note = try WordPress.Notification.fixture(.repliedComment, insertInto: contextManager.mainContext)
         XCTAssertTrue(note.kind == .comment)
     }
 
-    func testCommentNotificationRendersSubjectWithSnippet() {
-        let note = WordPress.Notification.fixture(.repliedComment, insertInto: contextManager.mainContext)
+    func testCommentNotificationRendersSubjectWithSnippet() throws {
+        let note = try WordPress.Notification.fixture(.repliedComment, insertInto: contextManager.mainContext)
 
         XCTAssertNotNil(note.renderSubject())
         XCTAssertNotNil(note.renderSnippet())
     }
 
-    func testCommentNotificationContainsHeaderContent() {
-        let note = WordPress.Notification.fixture(.repliedComment, insertInto: contextManager.mainContext)
+    func testCommentNotificationContainsHeaderContent() throws {
+        let note = try WordPress.Notification.fixture(.repliedComment, insertInto: contextManager.mainContext)
 
         let header = note.headerContentGroup
         XCTAssertNotNil(header)
@@ -172,56 +172,56 @@ class NotificationTests: XCTestCase {
         XCTAssertNotNil(snippetBlock?.text)
     }
 
-    func testCommentNotificationContainsCommentAndSiteID() {
-        let note = WordPress.Notification.fixture(.repliedComment, insertInto: contextManager.mainContext)
+    func testCommentNotificationContainsCommentAndSiteID() throws {
+        let note = try WordPress.Notification.fixture(.repliedComment, insertInto: contextManager.mainContext)
         XCTAssertNotNil(note.metaSiteID)
         XCTAssertNotNil(note.metaCommentID)
     }
 
-    func testCommentNotificationProperlyChecksIfItWasRepliedTo() {
-        let note = WordPress.Notification.fixture(.repliedComment, insertInto: contextManager.mainContext)
+    func testCommentNotificationProperlyChecksIfItWasRepliedTo() throws {
+        let note = try WordPress.Notification.fixture(.repliedComment, insertInto: contextManager.mainContext)
         XCTAssert(note.isRepliedComment)
     }
 
-    func testCommentNotificationIsUnapproved() {
-        let note = WordPress.Notification.fixture(.unapprovedComment, insertInto: contextManager.mainContext)
+    func testCommentNotificationIsUnapproved() throws {
+        let note = try WordPress.Notification.fixture(.unapprovedComment, insertInto: contextManager.mainContext)
         XCTAssertTrue(note.isUnapprovedComment)
     }
 
-    func testCommentNotificationIsApproved() {
-        let note = WordPress.Notification.fixture(.repliedComment, insertInto: contextManager.mainContext)
+    func testCommentNotificationIsApproved() throws {
+        let note = try WordPress.Notification.fixture(.repliedComment, insertInto: contextManager.mainContext)
         XCTAssertFalse(note.isUnapprovedComment)
     }
 
 
-    func testFooterContentIsIdentifiedAndCreated() {
-        let note = WordPress.Notification.fixture(.repliedComment, insertInto: contextManager.mainContext)
+    func testFooterContentIsIdentifiedAndCreated() throws {
+        let note = try WordPress.Notification.fixture(.repliedComment, insertInto: contextManager.mainContext)
         let footerBlock: FooterTextContent? = note.contentGroup(ofKind: .footer)?.blockOfKind(.text)
 
         XCTAssertNotNil(footerBlock)
     }
 
-    func testFindingContentRangeSearchingByURL() {
-        let note = WordPress.Notification.fixture(.badge, insertInto: contextManager.mainContext)
+    func testFindingContentRangeSearchingByURL() throws {
+        let note = try WordPress.Notification.fixture(.badge, insertInto: contextManager.mainContext)
         let targetURL = URL(string: "http://www.wordpress.com")!
         let range = note.contentRange(with: targetURL)
 
         XCTAssertNotNil(range)
     }
 
-    func testPingbackNotificationIsPingback() {
-        let notification = WordPress.Notification.fixture(.pingback, insertInto: contextManager.mainContext)
+    func testPingbackNotificationIsPingback() throws {
+        let notification = try WordPress.Notification.fixture(.pingback, insertInto: contextManager.mainContext)
         XCTAssertTrue(notification.isPingback)
     }
 
-    func testPingbackBodyContainsFooter() {
-        let notification = WordPress.Notification.fixture(.pingback, insertInto: contextManager.mainContext)
+    func testPingbackBodyContainsFooter() throws {
+        let notification = try WordPress.Notification.fixture(.pingback, insertInto: contextManager.mainContext)
         let footer = notification.bodyContentGroups.filter { $0.kind == .footer }
         XCTAssertEqual(footer.count, 1)
     }
 
-    func testHeaderAndBodyContentGroups() {
-        let note = WordPress.Notification.fixture(.repliedComment, insertInto: contextManager.mainContext)
+    func testHeaderAndBodyContentGroups() throws {
+        let note = try WordPress.Notification.fixture(.repliedComment, insertInto: contextManager.mainContext)
         let headerGroupsCount = note.headerContentGroup != nil ? 1 : 0
         let bodyGroupsCount = note.bodyContentGroups.count
         let totalGroupsCount = headerGroupsCount + bodyGroupsCount

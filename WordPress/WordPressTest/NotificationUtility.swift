@@ -24,8 +24,8 @@ extension Fixture {
 
 extension WordPress.Notification {
 
-    static func fixture(_ fixture: Fixture.Notification, insertInto context: NSManagedObjectContext) -> WordPress.Notification {
-        return .fixture(fromFile: fixture.rawValue, context: context)
+    static func fixture(_ fixture: Fixture.Notification, insertInto context: NSManagedObjectContext) throws -> WordPress.Notification {
+        return try .fixture(fromFile: fixture.fileName, insertInto: context)
     }
 
 }

@@ -9,7 +9,7 @@ final class NotificationsContentFactoryTests: XCTestCase {
         let subject = NotificationContentFactory.content(
             from: [try Fixture.NotificationContent.text.jsonObject()],
             actionsParser: NotificationActionParser(),
-            parent: WordPress.Notification.fixture(.like, insertInto: contextManager.mainContext)
+            parent: try WordPress.Notification.fixture(.like, insertInto: contextManager.mainContext)
         ).first as? NotificationTextContent
 
         XCTAssertNotNil(subject)
@@ -19,7 +19,7 @@ final class NotificationsContentFactoryTests: XCTestCase {
         let subject = NotificationContentFactory.content(
             from: [try Fixture.NotificationContent.comment.jsonObject()],
             actionsParser: NotificationActionParser(),
-            parent: WordPress.Notification.fixture(.like, insertInto: contextManager.mainContext)
+            parent: try WordPress.Notification.fixture(.like, insertInto: contextManager.mainContext)
         ).first as? FormattableCommentContent
 
         XCTAssertNotNil(subject)
@@ -29,7 +29,7 @@ final class NotificationsContentFactoryTests: XCTestCase {
         let subject = NotificationContentFactory.content(
             from: [try Fixture.NotificationContent.user.jsonObject()],
             actionsParser: NotificationActionParser(),
-            parent: WordPress.Notification.fixture(.like, insertInto: contextManager.mainContext)
+            parent: try WordPress.Notification.fixture(.like, insertInto: contextManager.mainContext)
         ).first as? FormattableUserContent
 
         XCTAssertNotNil(subject)

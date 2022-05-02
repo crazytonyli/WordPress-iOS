@@ -19,9 +19,9 @@ class NotificationContentRouterTests: XCTestCase {
         super.tearDown()
     }
 
-    func testFollowNotificationSourceRoutesToStream() {
+    func testFollowNotificationSourceRoutesToStream() throws {
         sut = NotificationContentRouter(
-            activity: .fixture(.newFollower, insertInto: contextManager.mainContext),
+            activity: try .fixture(.newFollower, insertInto: contextManager.mainContext),
             coordinator: coordinator
         )
         try! sut.routeToNotificationSource()

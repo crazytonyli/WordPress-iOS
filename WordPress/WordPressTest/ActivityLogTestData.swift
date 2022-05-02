@@ -18,7 +18,7 @@ extension Fixture {
         case activity = "activity-log-activity-content.json"
 
         func range() throws -> FormattableContentRange? {
-            let ranges = try jsonObject()["ranges"] as! [JSONLoader.JSONDictionary]
+            let ranges = try jsonObject()["ranges"] as! [JSONDictionary]
             return ActivityRangesFactory.contentRange(from: ranges[0])
         }
     }
@@ -35,7 +35,7 @@ extension Activity {
 extension ActivityRange {
 
     static func fixture(_ fixture: Fixture.Activity) throws -> FormattableContentRange? {
-        let ranges = try fixture.jsonObject()["ranges"] as! [JSONLoader.JSONDictionary]
+        let ranges = try fixture.jsonObject()["ranges"] as! [JSONDictionary]
         return ActivityRangesFactory.contentRange(from: ranges[0])
     }
 
