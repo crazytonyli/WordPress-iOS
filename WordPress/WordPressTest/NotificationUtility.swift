@@ -13,6 +13,13 @@ extension Fixture {
         case unapprovedComment = "notifications-unapproved-comment.json"
         case pingback = "notifications-pingback.json"
     }
+
+    enum NotificationContent: String, FixtureFile {
+        case comment = "notifications-comment-content.json"
+        case text = "notifications-text-content.json"
+        case buttonText = "notifications-button-text-content.json"
+        case user = "notifications-user-content.json"
+    }
 }
 
 extension WordPress.Notification {
@@ -24,14 +31,14 @@ extension WordPress.Notification {
 }
 
 class NotificationUtility {
-    func mockCommentContent(insertInto context: NSManagedObjectContext) -> FormattableCommentContent {
-        let dictionary = JSONLoader().loadFile(named: "notifications-replied-comment.json") ?? [:]
+    func mockCommentContent(insertInto context: NSManagedObjectContext) throws -> FormattableCommentContent {
+        let dictionary = try Fixture.Notification.repliedComment.jsonObject()
         let body = dictionary["body"]
         let blocks = NotificationContentFactory.content(from: body as! [[String: AnyObject]], actionsParser: NotificationActionParser(), parent: WordPress.Notification(context: context))
         return blocks.filter { $0.kind == .comment }.first! as! FormattableCommentContent
     }
 
-    func mockCommentContext(insertInto context: NSManagedObjectContext) -> ActionContext<FormattableCommentContent> {
-        return ActionContext(block: mockCommentContent(insertInto: context))
+    func mockCommentContext(insertInto context: NSManagedObjectContext) throws -> ActionContext<FormattableCommentContent> {
+        return ActionContext(block: try mockCommentContent(insertInto: context))
     }
 }

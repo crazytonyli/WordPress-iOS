@@ -66,10 +66,10 @@ final class ApproveCommentActionTests: XCTestCase {
         XCTAssertEqual(action?.actionTitle, ApproveComment.TitleStrings.approve)
     }
 
-    func testExecuteCallsUnapproveWhenActionIsOn() {
+    func testExecuteCallsUnapproveWhenActionIsOn() throws {
         action?.on = true
 
-        action?.execute(context: utility.mockCommentContext(insertInto: contextManager.mainContext))
+        action?.execute(context: try utility.mockCommentContext(insertInto: contextManager.mainContext))
 
         guard let mockService = action?.actionsService as? MockNotificationActionsService else {
             XCTFail()
@@ -79,17 +79,17 @@ final class ApproveCommentActionTests: XCTestCase {
         XCTAssertTrue(mockService.unapproveWasCalled)
     }
 
-    func testExecuteUpdatesActionTitleWhenActionIsOn() {
+    func testExecuteUpdatesActionTitleWhenActionIsOn() throws {
         action?.on = true
 
-        action?.execute(context: utility.mockCommentContext(insertInto: contextManager.mainContext))
+        action?.execute(context: try utility.mockCommentContext(insertInto: contextManager.mainContext))
         XCTAssertEqual(action?.actionTitle, ApproveComment.TitleStrings.approve)
     }
 
-    func testExecuteCallsApproveWhenActionIsOff() {
+    func testExecuteCallsApproveWhenActionIsOff() throws {
         action?.on = false
 
-        action?.execute(context: utility.mockCommentContext(insertInto: contextManager.mainContext))
+        action?.execute(context: try utility.mockCommentContext(insertInto: contextManager.mainContext))
 
         guard let mockService = action?.actionsService as? MockNotificationActionsService else {
             XCTFail()
@@ -99,10 +99,10 @@ final class ApproveCommentActionTests: XCTestCase {
         XCTAssertTrue(mockService.approveWasCalled)
     }
 
-    func testExecuteUpdatesActionTitleWhenActionIsOff() {
+    func testExecuteUpdatesActionTitleWhenActionIsOff() throws {
         action?.on = false
 
-        action?.execute(context: utility.mockCommentContext(insertInto: contextManager.mainContext))
+        action?.execute(context: try utility.mockCommentContext(insertInto: contextManager.mainContext))
         XCTAssertEqual(action?.actionTitle, ApproveComment.TitleStrings.unapprove)
     }
 }

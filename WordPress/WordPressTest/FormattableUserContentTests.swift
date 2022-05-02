@@ -22,10 +22,10 @@ final class FormattableUserContentTests: XCTestCase {
         static let mappedMediaRanges = [NSValue(range: imageRange): testImage]
     }
 
-    override func setUp() {
-        super.setUp()
+    override func setUpWithError() throws {
+        try super.setUpWithError()
         subject = FormattableUserContent(
-            dictionary: mockDictionary(),
+            dictionary: try Fixture.NotificationContent.user.jsonObject(),
             actions: mockedActions(),
             ranges: [],
             parent: WordPress.Notification.fixture(.like, insertInto: contextManager.mainContext)
@@ -73,13 +73,13 @@ final class FormattableUserContentTests: XCTestCase {
         XCTAssertEqual(subject?.imageUrls, [Expectations.imageURL])
     }
 
-    func testMetaReturnsExpectation() {
+    func testMetaReturnsExpectation() throws {
         let value = subject!.meta!
         let ids = value["ids"] as? [String: AnyObject]
         let userId = ids?["user"] as? String
         let siteId = ids?["site"] as? String
 
-        let mockMeta = loadMeta()
+        let mockMeta = try Fixture.jsonObject(fromFile: "notifications-user-content-meta.json")
         let mockIds = mockMeta["ids"] as? [String: AnyObject]
         let mockMetaUserId = mockIds?["user"] as? String
         let mockMetaSiteId = mockIds?["site"] as? String
@@ -132,18 +132,6 @@ final class FormattableUserContentTests: XCTestCase {
     func testMetaSiteIdReturnsExpectation() {
         let id = subject?.metaSiteID
         XCTAssertEqual(id, Expectations.metaSiteId)
-    }
-
-    private func mockDictionary() -> [String: AnyObject] {
-        return getDictionaryFromFile(named: "notifications-user-content.json")
-    }
-
-    private func getDictionaryFromFile(named fileName: String) -> [String: AnyObject] {
-        return JSONLoader().loadFile(named: fileName) ?? [:]
-    }
-
-    private func loadMeta() -> [String: AnyObject] {
-        return getDictionaryFromFile(named: "notifications-user-content-meta.json")
     }
 
     private func mockedActions() -> [FormattableContentAction] {

@@ -13,11 +13,11 @@ final class NotificationTextContentTests: XCTestCase {
         static let trashAction = TrashCommentAction(on: true, command: TrashComment(on: true))
     }
 
-    override func setUp() {
-        super.setUp()
+    override func setUpWithError() throws {
+        try super.setUpWithError()
         contextManager = TestContextManager()
         subject = NotificationTextContent(
-            dictionary: mockDictionary(),
+            dictionary: try Fixture.NotificationContent.text.jsonObject(),
             actions: mockedActions(),
             ranges: [],
             parent: WordPress.Notification.fixture(.like, insertInto: contextManager.mainContext)
@@ -61,9 +61,9 @@ final class NotificationTextContentTests: XCTestCase {
         XCTAssertNil(value)
     }
 
-    func testKindReturnsButtonForButtonContent() {
+    func testKindReturnsButtonForButtonContent() throws {
         subject = NotificationTextContent(
-            dictionary: mockButtonContentDictionary(),
+            dictionary: try Fixture.NotificationContent.buttonText.jsonObject(),
             actions: mockedActions(),
             ranges: [],
             parent: WordPress.Notification.fixture(.like, insertInto: contextManager.mainContext)
@@ -97,18 +97,6 @@ final class NotificationTextContentTests: XCTestCase {
         let approveCommentIdentifier = ApproveCommentAction.actionIdentifier()
         let action = subject?.action(id: approveCommentIdentifier)
         XCTAssertEqual(action?.identifier, approveCommentIdentifier)
-    }
-
-    private func mockDictionary() -> [String: AnyObject] {
-        return getDictionaryFromFile(named: "notifications-text-content.json")
-    }
-
-    private func mockButtonContentDictionary() -> [String: AnyObject] {
-        return getDictionaryFromFile(named: "notifications-button-text-content.json")
-    }
-
-    private func getDictionaryFromFile(named fileName: String) -> [String: AnyObject] {
-        return JSONLoader().loadFile(named: fileName) ?? [:]
     }
 
     private func mockedActions() -> [FormattableContentAction] {
